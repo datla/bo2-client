@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>bo2-filter-service</display-name>
+	<welcome-file-list>
+		<welcome-file>login.html</welcome-file>
+	</welcome-file-list>
+	<servlet>
+		<servlet-name>jersey-servlet</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>com.kthree.resource</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>TestServlet</servlet-name>
+		<servlet-class>com.kthree.servlet.session.TestServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TestServlet</servlet-name>
+		<url-pattern>/test/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>jersey-servlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
+	<filter>
+		<filter-name>BO2HttpFilter</filter-name>
+		<filter-class>com.kthree.servlet.filters.BO2HttpFilter</filter-class>
+		<init-param>
+			<param-name>application-name</param-name>
+			<param-value>BO2Client1</param-value>
+		</init-param>
+		<init-param>
+			<param-name>html-redirect-page</param-name>
+			<param-value>bo2_system_unavailable.html</param-value>
+		</init-param>
+
+	</filter>
+
+	<filter>
+		<filter-name>BO2RestFilter</filter-name>
+		<filter-class>com.kthree.servlet.filters.BO2RestFilter</filter-class>
+		<init-param>
+			<param-name>application-name</param-name>
+			<param-value>BO2Client1</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>BO2RestFilter</filter-name>
+		<servlet-name>jersey-servlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>BO2HttpFilter</filter-name>
+		<servlet-name>TestServlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+</web-app>
